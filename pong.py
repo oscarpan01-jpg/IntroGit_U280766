@@ -107,26 +107,18 @@ def get_config() -> tuple[int, int, int, int, int]:
     - Remember to maintain the same order of the returned elements.
         """
 
+  #He modificado la funcion añadiendo la funcion ask_yes_not
+  
+    if not ask_yes_no("Quieres cambiar los valores por defecto? (y/n): "): # si dice que no, devolvemos las constantes tal cual
+      return PADDLE_H, SPEED_PADDLE, SPEED_BALL_X, SPEED_BALL_Y, BALL_RADIUS
 
-    cambiar_valores = input("Quieres cambiar los valores por defecto? (y/n): ")
-    
-    if cambiar_valores == "n":
-        return PADDLE_H, SPEED_PADDLE, SPEED_BALL_X, SPEED_BALL_Y, BALL_RADIUS
+    paddle_h = read_int_in_range("Altura de la pala (60-160): ", 60, 160) # altura de la pala
+    paddle_speed = read_int_in_range("Velocidad de la pala (5-20): ", 5, 20) # velocidad de la pala
+    ball_x_speed = read_int_in_range("Velocidad de la pelota en X (5-20): ", 5, 20) # velocidad en el eje X
+    ball_y_speed = read_int_in_range("Velocidad de la pelota en Y (5-20): ", 5, 20) # velocidad en el eje Y
+    ball_radius = read_int_in_range("Radio de la pelota (5-20): ", 5, 20) # radio de la pelota
 
-    elif cambiar_valores == "y":
-        paddle_h = int(input("Introduce la altura de la pala (entre 60 y 160): "))
-        speed_paddle = int(input("Introduce la velocidad de la pala (entre 5 y 20): "))
-        speed_ball_x = int(input("Introduce la velocidad del balón en el eje X (entre 5 y 20): "))
-        speed_ball_y = int(input("Introduce la velocidad del balón en el eje Y (entre 5 y 20): "))
-        ball_radius = int(input("Introduce el radio del balón (entre 5 y 20): "))
-
-        if (paddle_h < 60 or paddle_h > 160 or speed_paddle < 5 or speed_paddle > 20 
-            or speed_ball_x < 5 or speed_ball_x > 20 or speed_ball_y < 5 or speed_ball_y > 20 
-            or ball_radius < 5 or ball_radius > 20):
-            print("Valores fuera de rango. Se usarán los valores por defecto.")
-            return PADDLE_H, SPEED_PADDLE, SPEED_BALL_X, SPEED_BALL_Y, BALL_RADIUS
-        else:
-            return paddle_h, speed_paddle, speed_ball_x, speed_ball_y, ball_radius
+    return paddle_h, paddle_speed, ball_x_speed, ball_y_speed, ball_radius # mismo orden que pide el enunciado
 
 
         # This line of code has been left for letting the full program work

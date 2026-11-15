@@ -107,31 +107,26 @@ def get_config() -> tuple[int, int, int, int, int]:
     - Remember to maintain the same order of the returned elements.
         """
 
-    cambiar_valores = str(input("Quieres cambiar los valores por defecto? (y/n): "))    # TODO: put your code!!!!
+
+    cambiar_valores = input("Quieres cambiar los valores por defecto? (y/n): ")
+    
     if cambiar_valores == "n":
-            
-        return PADDLE_H, PADDLE_W, SPEED_PADDLE, SPEED_BALL_X, SPEED_BALL_Y, BALL_RADIUS
+        return PADDLE_H, SPEED_PADDLE, SPEED_BALL_X, SPEED_BALL_Y, BALL_RADIUS
 
     elif cambiar_valores == "y":
+        paddle_h = int(input("Introduce la altura de la pala (entre 60 y 160): "))
+        speed_paddle = int(input("Introduce la velocidad de la pala (entre 5 y 20): "))
+        speed_ball_x = int(input("Introduce la velocidad del balón en el eje X (entre 5 y 20): "))
+        speed_ball_y = int(input("Introduce la velocidad del balón en el eje Y (entre 5 y 20): "))
+        ball_radius = int(input("Introduce el radio del balón (entre 5 y 20): "))
 
-            PADDLE_H = int(input("Introduce la altura de la pala (entre 60 y 160)  "))
-            PADDLE_W = int(input("Introduce el ancho de la pala (entre 10 y 50)  "))  
-            SPEED_PADDLE = int(input("Introduce la velocidad de la pala (entre 5 y 20)  "))
-            SPEED_BALL_X = int(input("Introduce la velocidad del balón en el eje X (entre 5 y 20)  "))
-            SPEED_BALL_Y = int(input("Introduce la velocidad del balón en el eje Y (entre 5 y 20)  "))
-            BALL_RADIUS = int(input("Introduce el radio del balón (entre 5 y 20)  "))
-
-            if PADDLE_H < 60 or PADDLE_H > 160 or PADDLE_W < 10 or PADDLE_W > 50 or SPEED_PADDLE < 5 or SPEED_PADDLE > 20 or SPEED_BALL_X < 5 or SPEED_BALL_X > 20 or SPEED_BALL_Y < 5 or SPEED_BALL_Y > 20 or BALL_RADIUS < 5 or BALL_RADIUS > 20:
-                print("Valores fuera de rango. Se usarán los valores por defecto.")
-                PADDLE_W = 14       # pixels
-                PADDLE_H = 110      # 110 pixels - can be changed in get_config()
-                PADDLE_MARGIN = 30  # pixels - distance from border
-                BALL_RADIUS = 9     # pixels - can be changed in get_config()
-                POINTS_END = 5      # score for ending a match
-                SERVE_PAUSE = 300
-                return PADDLE_H, SPEED_PADDLE, SPEED_BALL_X, SPEED_BALL_Y, BALL_RADIUS
-            else:
-                return PADDLE_H, SPEED_PADDLE, SPEED_BALL_X, SPEED_BALL_Y, BALL_RADIUS
+        if (paddle_h < 60 or paddle_h > 160 or speed_paddle < 5 or speed_paddle > 20 
+            or speed_ball_x < 5 or speed_ball_x > 20 or speed_ball_y < 5 or speed_ball_y > 20 
+            or ball_radius < 5 or ball_radius > 20):
+            print("Valores fuera de rango. Se usarán los valores por defecto.")
+            return PADDLE_H, SPEED_PADDLE, SPEED_BALL_X, SPEED_BALL_Y, BALL_RADIUS
+        else:
+            return paddle_h, speed_paddle, speed_ball_x, speed_ball_y, ball_radius
 
 
         # This line of code has been left for letting the full program work

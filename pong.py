@@ -573,7 +573,7 @@ def compute_ai_direction(ball_y: int, paddle_y: int, paddle_h: int) -> int:
     # This line of code has been left for letting the full program work
     # You will need to eliminate it when adding your code
     paddle_center = paddle_y + paddle_h / 2 # y del centro de la pala
-    tolerance = 30 # margen en píxeles para que la pala no vibre cuando está casi alineada
+    tolerance = 15 # margen en píxeles para que la pala no vibre cuando está casi alineada
 
     if ball_y < paddle_center - tolerance: # la pelota está por encima del centro de la pala
         return -1 # la pala sube

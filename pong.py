@@ -106,32 +106,20 @@ def get_config() -> tuple[int, int, int, int, int]:
     - Remember to maintain the same order of the returned elements.
     """
 
-
-    cambiar_valores = input("Quieres cambiar los valores por defecto? (y/n): ")
-    
-    if cambiar_valores == "n":
+    # TODO: put your code!!!!
+    if not ask_yes_no("Quieres cambiar los valores por defecto? (y/n): "): # si dice que no, devolvemos las constantes tal cual
         return PADDLE_H, SPEED_PADDLE, SPEED_BALL_X, SPEED_BALL_Y, BALL_RADIUS
 
-    elif cambiar_valores == "y":
-        paddle_h = int(input("Introduce la altura de la pala (entre 60 y 160): "))
-        speed_paddle = int(input("Introduce la velocidad de la pala (entre 5 y 20): "))
-        speed_ball_x = int(input("Introduce la velocidad del balón en el eje X (entre 5 y 20): "))
-        speed_ball_y = int(input("Introduce la velocidad del balón en el eje Y (entre 5 y 20): "))
-        ball_radius = int(input("Introduce el radio del balón (entre 5 y 20): "))
+    paddle_h = read_int_in_range("Altura de la pala (60-160): ", 60, 160) # altura de la pala
+    paddle_speed = read_int_in_range("Velocidad de la pala (5-20): ", 5, 20) # velocidad de la pala
+    ball_x_speed = read_int_in_range("Velocidad de la pelota en X (5-20): ", 5, 20) # velocidad en el eje X
+    ball_y_speed = read_int_in_range("Velocidad de la pelota en Y (5-20): ", 5, 20) # velocidad en el eje Y
+    ball_radius = read_int_in_range("Radio de la pelota (5-20): ", 5, 20) # radio de la pelota
 
-        if (paddle_h < 60 or paddle_h > 160 or speed_paddle < 5 or speed_paddle > 20 
-            or speed_ball_x < 5 or speed_ball_x > 20 or speed_ball_y < 5 or speed_ball_y > 20 
-            or ball_radius < 5 or ball_radius > 20):
-            print("Valores fuera de rango. Se usarán los valores por defecto.")
-            return PADDLE_H, SPEED_PADDLE, SPEED_BALL_X, SPEED_BALL_Y, BALL_RADIUS
-        else:
-            return paddle_h, speed_paddle, speed_ball_x, speed_ball_y, ball_radius
+    return paddle_h, paddle_speed, ball_x_speed, ball_y_speed, ball_radius # mismo orden que pide el enunciado
 
 
-        # This line of code has been left for letting the full program work
-        # It corresponds to the user answering NO to changing any default values 
-        # You will need to eliminate it when adding your code
-    
+
 def change_colors() -> tuple[tuple[int, int, int], tuple[int, int, int]]:
     """ Ask the user if they want to modify the game colors (background and foreground).
 
@@ -165,9 +153,17 @@ def change_colors() -> tuple[tuple[int, int, int], tuple[int, int, int]]:
 
     # TODO: put your code!!!!
 
-    # This line of code has been left for letting the full program work
-    # You will need to eliminate it when adding your code
-    return BLACK, WHITE
+    if not ask_yes_no("Quieres cambiar los colores? (y/n): "): # preguntamos si quiere cambiar los colores
+        return BLACK, WHITE
+
+    background_color = read_color("fondo") # color del fondo
+    foreground_color = read_color("paletas, pelota y texto") # color del resto
+
+    if background_color == foreground_color: # si son iguales no se vería nada
+        print("El fondo y el primer plano no pueden ser iguales. Se usarán blanco y negro.")
+        return BLACK, WHITE
+
+    return background_color, foreground_color
 
 def read_color(prompt: str) -> tuple[int, int, int]:
     """Ask the user to enter the three RGB components of a color with each component in [0,255].
@@ -205,12 +201,7 @@ def read_color(prompt: str) -> tuple[int, int, int]:
     b = read_int_in_range("  Azul (B, 0-255): ", 0, 255) # intensidad del azul
     return r, g, b # devolvemos los tres valores
     # return r, g, b
-  #He añadido la funcion que nos permite cambiar la intensidad del rojo azul y el verde para las combinaciones de los colores
-  print(f"Introduce el color de {prompt}:") # mostramos el color que estamos configurando
-    r = read_int_in_range("  Rojo (R, 0-255): ", 0, 255) # intensidad del rojo
-    g = read_int_in_range("  Verde (G, 0-255): ", 0, 255) # intensidad del verde
-    b = read_int_in_range("  Azul (B, 0-255): ", 0, 255) # intensidad del azul
-    return r, g, b # devolvemos los tres valores
+
 def read_int_in_range(prompt: str, low: int, high: int) -> int:
     """Ask user for an integer within [low, high]. 
     Keeps asking until a valid value is entered.
@@ -233,6 +224,15 @@ def read_int_in_range(prompt: str, low: int, high: int) -> int:
     """
     
     # TODO: put your code!!!!
+    while True:
+        try:
+            value = int(input(prompt))
+        except ValueError:
+            print("Debes introducir un número entero.")
+            continue
+        if low <= value <= high:
+            return value
+        print(f"El valor debe estar entre {low} y {high}.")
 
 def read_int_in_range_w_default(prompt: str, low: int, high: int, default_val: int) -> int:
     """ Advanced/alternate more user-friendly version of read_int_in_range().
@@ -298,9 +298,14 @@ def ask_yes_no(prompt: str) -> bool:
     - Print a short message (e.g. "Please answer y/n.") when the answer is invalid.
     - Return only after receiving a valid input; do not stop the program with errors.
     """
-  
     # TODO: put your code!!!!
-
+    while True:
+        answer = input(prompt).strip().lower() # leemos la respuesta, sin espacios y en minúsculas
+        if answer == "y":
+            return True # el usuario dice que sí
+        if answer == "n":
+            return False # el usuario dice que no
+        print("Responde con 'y' o 'n'.") # cualquier otra cosa, se vuelve a preguntar
 # ================================
 # Functions to complete: main game
 # ================================
@@ -561,7 +566,8 @@ def compute_ai_direction(ball_y: int, paddle_y: int, paddle_h: int) -> int:
 
     # This line of code has been left for letting the full program work
     # You will need to eliminate it when adding your code
-    return 0
+    paddle_center = paddle_y + paddle_h / 2 # y del centro de la pala
+    tolerance = 30 # margen en píxeles para que la pala no vibre cuando está casi alineada
 
     if ball_y < paddle_center - tolerance: # la pelota está por encima del centro de la pala
         return -1 # la pala sube

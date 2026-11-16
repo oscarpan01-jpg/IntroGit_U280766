@@ -458,7 +458,6 @@ def collide_ball_paddle(x: int, y: int, vx: int, vy: int, paddle_x: int, paddle_
             x = paddle_right + radius # la sacamos fuera, pegada al lado derecho de la pala
             vx = abs(vx) # rebota hacia la derecha
 
-        # EFECTO OPCIONAL: el ángulo depende de dónde golpea la pelota en la pala
         paddle_center = paddle_y + paddle_h / 2 # y del centro de la pala
         offset = (y - paddle_center) / (paddle_h / 2) # -1 = borde de arriba, 0 = centro, +1 = borde de abajo
         if offset < -1: # por si la pelota golpea la esquina y se pasa del rango

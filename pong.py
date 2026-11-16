@@ -326,9 +326,6 @@ def move_paddle(current_y: int, direction: int, speed: int, height: int, paddle_
         new_y = height - paddle_h
 
     return new_y # devolvemos la nueva posición
-    # This line of code has been left for letting the full program work
-    # You will need to eliminate it when adding your code
-
 
 def move_ball(x: int, y: int, vx: int, vy: int) -> tuple[int, int]:
     """Move the ball one time step. Return (x', y').
@@ -343,10 +340,6 @@ def move_ball(x: int, y: int, vx: int, vy: int) -> tuple[int, int]:
     Note that collisions (i.e. with the paddles, with the walls) are not considered yet here, 
     but in the next 2 functions (collide_ball_walls and collide_ball_paddle)
     """
-
-
-    # This line of code has been left for letting the full program work
-    # You will need to eliminate it when adding your code
     
     new_x = x + vx # desplazamos la pelota en horizontal
     new_y = y + vy # desplazamos la pelota en vertical
@@ -373,8 +366,6 @@ def collide_ball_walls(x: int, y: int, vx: int, vy: int, radius: int, width: int
         For precisely detecting collisions, you might need to consider the ball radius
     """
 
-    # This line of code has been left for letting the full program work
-    # You will need to eliminate it when adding your code
     if y - radius < 0: # el borde superior de la pelota ha tocado o pasado la pared de arriba
         y = radius # la colocamos justo dentro, pegada a la pared
         vy = -vy # invertimos la velocidad vertical: ahora baja
@@ -501,9 +492,7 @@ def reset_ball(center_x: int, center_y: int, vx0: int, vy0: int, to_right: bool)
     - The horizontal velocity must point in the correct direction depending on `to_right`.
     - Optionally, randomize the vertical velocity slightly (e.g., sign or magnitude) for variability.
     """
-
-    # This line of code has been left for letting the full program work
-    # You will need to eliminate/modify it when adding your code
+  
     x = center_x # la pelota siempre empieza en el centro
     y = center_y
 
@@ -550,8 +539,6 @@ def compute_ai_direction(ball_y: int, paddle_y: int, paddle_h: int) -> int:
     when the ball is aligned enough.
     """
 
-    # This line of code has been left for letting the full program work
-    # You will need to eliminate it when adding your code
     paddle_center = paddle_y + paddle_h / 2 # y del centro de la pala
     tolerance = 30 # margen en píxeles para que la pala no vibre cuando está casi alineada
 

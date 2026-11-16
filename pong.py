@@ -67,14 +67,13 @@ KEY_UP_RIGHT = pygame.K_UP          # arrow UP
 KEY_DOWN_RIGHT = pygame.K_DOWN      # arrow DOWN
 
 # Play against machine (optional feature): set to True once compute_ai_direction() is implemented
-PLAY_AGAINST_MACHINE = False
+PLAY_AGAINST_MACHINE = True
 
 # ==============================================================================
 # Functions to complete by the students : configuration/setup before game starts
 # ==============================================================================
 
 def get_config() -> tuple[int, int, int, int, int]:
-
     """ Ask the user whether they want to modify the main game parameters:
     (paddle height, paddle speed, ball X speed, ball Y speed, and ball radius).
    
@@ -105,34 +104,22 @@ def get_config() -> tuple[int, int, int, int, int]:
     - Keep the function free of global assignments: it should only **return**
       the chosen values, not modify constants.
     - Remember to maintain the same order of the returned elements.
-        """
+    """
 
-
-    cambiar_valores = input("Quieres cambiar los valores por defecto? (y/n): ")
-    
-    if cambiar_valores == "n":
+    # TODO: put your code!!!!
+    if not ask_yes_no("Quieres cambiar los valores por defecto? (y/n): "): # si dice que no, devolvemos las constantes tal cual
         return PADDLE_H, SPEED_PADDLE, SPEED_BALL_X, SPEED_BALL_Y, BALL_RADIUS
 
-    elif cambiar_valores == "y":
-        paddle_h = int(input("Introduce la altura de la pala (entre 60 y 160): "))
-        speed_paddle = int(input("Introduce la velocidad de la pala (entre 5 y 20): "))
-        speed_ball_x = int(input("Introduce la velocidad del balón en el eje X (entre 5 y 20): "))
-        speed_ball_y = int(input("Introduce la velocidad del balón en el eje Y (entre 5 y 20): "))
-        ball_radius = int(input("Introduce el radio del balón (entre 5 y 20): "))
+    paddle_h = read_int_in_range("Altura de la pala (60-160): ", 60, 160) # altura de la pala
+    paddle_speed = read_int_in_range("Velocidad de la pala (5-20): ", 5, 20) # velocidad de la pala
+    ball_x_speed = read_int_in_range("Velocidad de la pelota en X (5-20): ", 5, 20) # velocidad en el eje X
+    ball_y_speed = read_int_in_range("Velocidad de la pelota en Y (5-20): ", 5, 20) # velocidad en el eje Y
+    ball_radius = read_int_in_range("Radio de la pelota (5-20): ", 5, 20) # radio de la pelota
 
-        if (paddle_h < 60 or paddle_h > 160 or speed_paddle < 5 or speed_paddle > 20 
-            or speed_ball_x < 5 or speed_ball_x > 20 or speed_ball_y < 5 or speed_ball_y > 20 
-            or ball_radius < 5 or ball_radius > 20):
-            print("Valores fuera de rango. Se usarán los valores por defecto.")
-            return PADDLE_H, SPEED_PADDLE, SPEED_BALL_X, SPEED_BALL_Y, BALL_RADIUS
-        else:
-            return paddle_h, speed_paddle, speed_ball_x, speed_ball_y, ball_radius
+    return paddle_h, paddle_speed, ball_x_speed, ball_y_speed, ball_radius # mismo orden que pide el enunciado
 
 
-        # This line of code has been left for letting the full program work
-        # It corresponds to the user answering NO to changing any default values 
-        # You will need to eliminate it when adding your code
-    
+
 def change_colors() -> tuple[tuple[int, int, int], tuple[int, int, int]]:
     """ Ask the user if they want to modify the game colors (background and foreground).
 
@@ -166,9 +153,17 @@ def change_colors() -> tuple[tuple[int, int, int], tuple[int, int, int]]:
 
     # TODO: put your code!!!!
 
-    # This line of code has been left for letting the full program work
-    # You will need to eliminate it when adding your code
-    return BLACK, WHITE
+    if not ask_yes_no("Quieres cambiar los colores? (y/n): "): # preguntamos si quiere cambiar los colores
+        return BLACK, WHITE
+
+    background_color = read_color("fondo") # color del fondo
+    foreground_color = read_color("paletas, pelota y texto") # color del resto
+
+    if background_color == foreground_color: # si son iguales no se vería nada
+        print("El fondo y el primer plano no pueden ser iguales. Se usarán blanco y negro.")
+        return BLACK, WHITE
+
+    return background_color, foreground_color
 
 def read_color(prompt: str) -> tuple[int, int, int]:
     """Ask the user to enter the three RGB components of a color with each component in [0,255].
@@ -200,6 +195,11 @@ def read_color(prompt: str) -> tuple[int, int, int]:
     """ 
 
     # TODO: put your code!!!!
+    print(f"Introduce el color de {prompt}:") # mostramos el color que estamos configurando
+    r = read_int_in_range("  Rojo (R, 0-255): ", 0, 255) # intensidad del rojo
+    g = read_int_in_range("  Verde (G, 0-255): ", 0, 255) # intensidad del verde
+    b = read_int_in_range("  Azul (B, 0-255): ", 0, 255) # intensidad del azul
+    return r, g, b # devolvemos los tres valores
     # return r, g, b
 
 def read_int_in_range(prompt: str, low: int, high: int) -> int:
@@ -224,6 +224,15 @@ def read_int_in_range(prompt: str, low: int, high: int) -> int:
     """
     
     # TODO: put your code!!!!
+    while True:
+        try:
+            value = int(input(prompt))
+        except ValueError:
+            print("Debes introducir un número entero.")
+            continue
+        if low <= value <= high:
+            return value
+        print(f"El valor debe estar entre {low} y {high}.")
 
 def read_int_in_range_w_default(prompt: str, low: int, high: int, default_val: int) -> int:
     """ Advanced/alternate more user-friendly version of read_int_in_range().
@@ -290,7 +299,13 @@ def ask_yes_no(prompt: str) -> bool:
     - Return only after receiving a valid input; do not stop the program with errors.
     """
     # TODO: put your code!!!!
-
+    while True:
+        answer = input(prompt).strip().lower() # leemos la respuesta, sin espacios y en minúsculas
+        if answer == "y":
+            return True # el usuario dice que sí
+        if answer == "n":
+            return False # el usuario dice que no
+        print("Responde con 'y' o 'n'.") # cualquier otra cosa, se vuelve a preguntar
 # ================================
 # Functions to complete: main game
 # ================================
@@ -310,10 +325,16 @@ def move_paddle(current_y: int, direction: int, speed: int, height: int, paddle_
     That is when it reaches the limits (up or down) it stays there, so consider paddle_h and height here.
     """
     # TODO: put your code!!!!
-    
+    new_y = current_y + direction * speed # movemos la pala: dirección (-1, 0, +1) por la velocidad
+
+    if new_y < 0: # si se sale por arriba, la dejamos en el borde superior
+        new_y = 0
+    if new_y > height - paddle_h: # si se sale por abajo, la dejamos con su parte inferior en el borde
+        new_y = height - paddle_h
+
+    return new_y # devolvemos la nueva posición
     # This line of code has been left for letting the full program work
     # You will need to eliminate it when adding your code
-    return current_y
 
 
 def move_ball(x: int, y: int, vx: int, vy: int) -> tuple[int, int]:
@@ -334,7 +355,11 @@ def move_ball(x: int, y: int, vx: int, vy: int) -> tuple[int, int]:
 
     # This line of code has been left for letting the full program work
     # You will need to eliminate it when adding your code
-    return x, y
+    
+    new_x = x + vx # desplazamos la pelota en horizontal
+    new_y = y + vy # desplazamos la pelota en vertical
+
+    return new_x, new_y
 
 
 def collide_ball_walls(x: int, y: int, vx: int, vy: int, radius: int, width: int, height: int) -> tuple[int, int, int, int]:
@@ -359,6 +384,14 @@ def collide_ball_walls(x: int, y: int, vx: int, vy: int, radius: int, width: int
 
     # This line of code has been left for letting the full program work
     # You will need to eliminate it when adding your code
+    if y - radius < 0: # el borde superior de la pelota ha tocado o pasado la pared de arriba
+        y = radius # la colocamos justo dentro, pegada a la pared
+        vy = -vy # invertimos la velocidad vertical: ahora baja
+
+    if y + radius > height: # el borde inferior de la pelota ha tocado o pasado la pared de abajo
+        y = height - radius # la colocamos justo dentro, pegada a la pared
+        vy = -vy # invertimos la velocidad vertical: ahora sube
+
     return x, y, vx, vy
 
 
@@ -412,11 +445,39 @@ def collide_ball_paddle(x: int, y: int, vx: int, vy: int, paddle_x: int, paddle_
       which is sufficient for this game.
     """
     # TODO: put your code!!!!
-    hit = False
+    hit = False # de momento asumimos que no hay colisión
 
-    # This line of code has been left for letting the full program work
-    # You will need to eliminate it when adding your code
-    return x, y, vx, vy, hit
+    ball_left = x - radius # lados de la "caja" de la pelota
+    ball_right = x + radius
+    ball_top = y - radius
+    ball_bottom = y + radius
+
+    paddle_left = paddle_x # lados de la pala
+    paddle_right = paddle_x + paddle_w
+    paddle_top = paddle_y
+    paddle_bottom = paddle_y + paddle_h
+
+    if (ball_left < paddle_right and ball_right > paddle_left
+            and ball_top < paddle_bottom and ball_bottom > paddle_top): # los dos rectángulos se solapan
+        hit = True # hay colisión
+
+        if x < paddle_x + paddle_w / 2: # la pelota está en el lado izquierdo de la pala
+            x = paddle_left - radius # la sacamos fuera, pegada al lado izquierdo de la pala
+            vx = -abs(vx) # rebota hacia la izquierda
+        else: # la pelota está en el lado derecho de la pala
+            x = paddle_right + radius # la sacamos fuera, pegada al lado derecho de la pala
+            vx = abs(vx) # rebota hacia la derecha
+
+        # EFECTO OPCIONAL: el ángulo depende de dónde golpea la pelota en la pala
+        paddle_center = paddle_y + paddle_h / 2 # y del centro de la pala
+        offset = (y - paddle_center) / (paddle_h / 2) # -1 = borde de arriba, 0 = centro, +1 = borde de abajo
+        if offset < -1: # por si la pelota golpea la esquina y se pasa del rango
+            offset = -1
+        if offset > 1:
+            offset = 1
+        vy = int(offset * abs(vx)) # más lejos del centro = más inclinación (hacia arriba o hacia abajo)
+
+    return x, y, vx, vy, hit # posición y velocidades (corregidas si hubo choque) y si hubo choque
 
 def reset_ball(center_x: int, center_y: int, vx0: int, vy0: int, to_right: bool) -> tuple[int, int, int, int]:
     """ Reset the ball to the center of the screen and return its initial position and velocity after a point has been scored.
@@ -456,7 +517,19 @@ def reset_ball(center_x: int, center_y: int, vx0: int, vy0: int, to_right: bool)
 
     # This line of code has been left for letting the full program work
     # You will need to eliminate/modify it when adding your code
-    return center_x, center_y, vx0, vy0
+    x = center_x # la pelota siempre empieza en el centro
+    y = center_y
+
+    if to_right: # según la dirección, vx es positivo (derecha) o negativo (izquierda)
+        vx = abs(vx0)
+    else:
+        vx = -abs(vx0)
+
+    vy = abs(vy0) # velocidad vertical base, siempre positiva de momento
+    if random.random() < 0.5: # con probabilidad 50% la pelota empieza subiendo en vez de bajando
+        vy = -vy
+
+    return x, y, vx, vy # posición inicial y velocidades
 
 
 
@@ -493,8 +566,14 @@ def compute_ai_direction(ball_y: int, paddle_y: int, paddle_h: int) -> int:
 
     # This line of code has been left for letting the full program work
     # You will need to eliminate it when adding your code
-    return 0
+    paddle_center = paddle_y + paddle_h / 2 # y del centro de la pala
+    tolerance = 30 # margen en píxeles para que la pala no vibre cuando está casi alineada
 
+    if ball_y < paddle_center - tolerance: # la pelota está por encima del centro de la pala
+        return -1 # la pala sube
+    if ball_y > paddle_center + tolerance: # la pelota está por debajo del centro de la pala
+        return 1 # la pala baja
+    return 0 # la pelota está alineada (dentro del margen): la pala se queda quieta
 # =============================================
 # Checking KEYS UP/DOWN (given to the students)
 # =============================================
